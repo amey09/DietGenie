@@ -15,9 +15,6 @@ import {
 } from "@chakra-ui/react";
 import {useSelector} from "react-redux";
 import Slider from 'react-slick';
-import "../styles/slick-theme.css"
-import "../styles/slick.css"
-
 export default function DietPlanScreen() {
 
     const DietPlan = useSelector(state => state.dietPlanStore.dietPlan);
