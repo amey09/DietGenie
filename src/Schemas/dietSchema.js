@@ -1,5 +1,5 @@
 export const dietPlanSchema = {
-    "Monday": {
+    "Today's Plan": {
         "Breakfast": [
             {
                 "Food": "Eggs",
