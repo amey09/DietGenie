@@ -26,22 +26,22 @@ export default function MainAppScreen() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const handleSubmit = async () => {
-        try {
-            const customPrompt = `${prompt}\nGenerate a high protein rich Dietplan for a week.
-                Result must be in json format. Each day has 3 meals each meal contains 3 items.
-                Provide Protein, Carbs, Fats of each food item.
-                Follow this json: ${JSON.stringify(dietPlanSchema)}`;
-
-            const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, { prompt: customPrompt });
-            const dietPlanData = response.data;
-            dispatch(setDietPlan(dietPlanData));
-            navigate('/diet-plan')
-            console.log(dietPlanData);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // const handleSubmit = async () => {
+    //     try {
+    //         const customPrompt = `${prompt}\nGenerate a high protein rich Dietplan for a day.
+    //             Result must be in json format. Each day has 3 meals each meal contains 3 items.
+    //             Provide Protein, Carbs, Fats of each food item.
+    //             Follow this json: ${JSON.stringify(dietPlanSchema)}`;
+    //
+    //         const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, { prompt: customPrompt });
+    //         const dietPlanData = response.data;
+    //         dispatch(setDietPlan(dietPlanData));
+    //         navigate('/diet-plan')
+    //         console.log(dietPlanData);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
   return (
     <Center h={'100vh'} backgroundImage={'/leaf.png'} backgroundSize={'cover'}>
@@ -63,7 +63,7 @@ export default function MainAppScreen() {
             that tells you exactly what to Eat to Breakfast ,Lunch and Dinner.
             All at the touch of a button
           </Text>
-            <Button rounded={'full'} backgroundColor={'black'} colorScheme={'blackAlpha'} textColor={'white'} onClick={handleSubmit}>
+            <Button rounded={'full'} backgroundColor={'black'} colorScheme={'blackAlpha'} textColor={'white'} onClick={() => navigate('/diet-plan')}>
                 Generate you diet plan now
             </Button>
         </VStack>

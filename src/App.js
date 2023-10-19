@@ -3,7 +3,9 @@ import {Route, Routes} from "react-router-dom";
 import MainAppScreen from "./screens/MainAppScreen";
 import DietPlanScreen from "./screens/DietPlanScreen";
 
+
 function App() {
+
     return (
         <>
             <Navbar/>

@@ -14,10 +14,21 @@ import {
     Tr
 } from "@chakra-ui/react";
 import {useSelector} from "react-redux";
+import Slider from 'react-slick';
+import "../styles/slick-theme.css"
+import "../styles/slick.css"
 
 export default function DietPlanScreen() {
 
     const DietPlan = useSelector(state => state.dietPlanStore.dietPlan);
+
+    const settings = {
+        arrows: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
 
     const MealCard = ({ day, meals }) => {
 
@@ -29,7 +40,7 @@ export default function DietPlanScreen() {
             <Table>
                 <Thead>
                     <Tr>
-                        <Th>Meals</Th>
+                        <Th padding={" sm: 0, md: 0, lg: 0"}>Meals</Th>
                         <Th>Food Items</Th>
                         <Th>Macros (Protein, Carbs, Fats)</Th>
                     </Tr>
@@ -65,27 +76,28 @@ export default function DietPlanScreen() {
 
     return (
         <>
-            <Box minHeight={'5rem'} backgroundColor={'lightcoral'}/>
-            <Center h={"calc(100vh - 5rem)"} backgroundImage={'/fruits.png'} backgroundSize={'cover'}>
-                {Object.keys(DietPlan).map(day => (
-                    <div key={day}>
-                        <Card
-                            position={'relative'}
-                            width={'50rem'}
-                            height={'31rem'}
-                            transform="translateX(+28%)"
-                            padding={'0.7rem'}
-                        >
-                            <CardHeader>
-                                <Heading as={"h2"}>{day}</Heading>
-                            </CardHeader>
-                            <CardBody>
-                                <MealCard day={day} meals={["Breakfast", "Lunch", "Dinner"]} />
-                            </CardBody>
-                        </Card>
-                    </div>
-                ))}
+            <Box minHeight={'5rem'} backgroundColor={'lightcoral'} />
+            <Center h={"calc(100vh - 5rem)"} backgroundImage={'/fruits.png'} backgroundSize={'cover'} display={"flex"} alignItems={'center'} justifyContent={"center"}>
+                <Slider {...settings}>
+                    {Object.keys(DietPlan).map(day => (
+                        <div key={day}>
+                            <Card
+                                width={'50rem'}
+                                height={'31rem'}
+                                padding={'0.7rem'}
+                            >
+                                <CardHeader>
+                                    <Heading as={"h2"}>{day}</Heading>
+                                </CardHeader>
+                                <CardBody>
+                                    <MealCard day={day} meals={["Breakfast", "Lunch", "Dinner"]} />
+                                </CardBody>
+                            </Card>
+                        </div>
+                    ))}
+                </Slider>
             </Center>
         </>
+
     )
 }
