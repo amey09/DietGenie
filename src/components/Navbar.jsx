@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Collapse, Flex, Heading, HStack, IconButton, Stack, Text} from "@chakra-ui/react";
-import {Link, useLocation} from "react-router-dom"
-import {HamburgerIcon} from '@chakra-ui/icons'
+import {Link} from "react-router-dom"
+import { AiOutlineMenuFold } from "react-icons/ai"
 
 export default function Navbar ({isLoggedIn, setIsLoggedIn}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,7 +15,7 @@ export default function Navbar ({isLoggedIn, setIsLoggedIn}) {
         <IconButton
             aria-label={'Menu'}
             display={{ sm: 'block', md: "none"}}
-            icon={<HamburgerIcon />}
+            icon={<AiOutlineMenuFold />}
             position={'fixed'}
             right={'.5rem'}
             isRound={true}
