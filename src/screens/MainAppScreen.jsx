@@ -14,23 +14,6 @@ export default function MainAppScreen() {
   const [prompt, setPrompt] = useState(undefined);
   const navigate = useNavigate();
 
-  // const handleSubmit = async () => {
-  //     try {
-  //         const customPrompt = `${prompt}\nGenerate a high protein rich Dietplan for a day.
-  //             Result must be in json format. Each day has 3 meals each meal contains 3 items.
-  //             Provide Protein, Carbs, Fats of each food item.
-  //             Follow this json: ${JSON.stringify(dietPlanSchema)}`;
-  //
-  //         const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, { prompt: customPrompt });
-  //         const dietPlanData = response.data;
-  //         dispatch(setDietPlan(dietPlanData));
-  //         navigate('/diet-plan')
-  //         console.log(dietPlanData);
-  //     } catch (error) {
-  //         console.log(error);
-  //     }
-  // }
-
   return (
     <Center h={"100vh"} backgroundImage={"/leaf.png"} backgroundSize={"cover"}>
       <VStack>
