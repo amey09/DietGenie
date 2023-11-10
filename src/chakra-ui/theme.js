@@ -8,7 +8,7 @@ const theme = extendTheme({
     fonts: {
         nav_item: `Poppins`,
         heading: 'Arial Black',
-        button: 'Inter',
+        paragraph: 'Inter',
         hero: 'Nunito Sans',
     },
 })
