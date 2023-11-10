@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import {
   Button,
   Center,
@@ -12,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { SearchIcon } from "@chakra-ui/icons";
+import { dietPlanSchema } from "../utils/dietSchema";
 
 export default function MainAppScreen() {
   const [prompt, setPrompt] = useState(undefined);
@@ -25,7 +27,42 @@ export default function MainAppScreen() {
     }
   }, []);
 
-  const handleSubmit = () => {
+  const BASE_URL = "http://localhost:5000/api";
+  const DIET_URL = "diet";
+
+  // const handleSubmit = async () => {
+  //     try {
+  //         const customPrompt = ${prompt}\nGenerate a high protein rich Dietplan for a day.
+  //             Result must be in json format. Each day has 3 meals each meal contains 3 items.
+  //             Provide Protein, Carbs, Fats of each food item.
+  //             Follow this json: ${JSON.stringify(dietPlanSchema)};
+  //
+  //         const response = await axios.post(${BASE_URL}/${DIET_URL}/getDietPlan, { prompt: customPrompt });
+  //         const dietPlanData = response.data;
+  //         dispatch(setDietPlan(dietPlanData));
+  //         navigate('/diet-plan')
+  //         console.log(dietPlanData);
+  //     } catch (error) {
+  //         console.log(error);
+  //     }
+  // }
+
+  const handleSubmit = async () => {
+    try {
+      const customPrompt = `${prompt}\nGenerate a high protein rich Dietplan for a day.
+              Result must be in json format. Each day has 3 meals each meal contains 3 items.
+              Provide Protein, Carbs, Fats of each food item.
+              Follow this json: ${JSON.stringify(dietPlanSchema)};`;
+
+      const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, {
+        prompt: customPrompt,
+      });
+      const dietPlanData = response.data;
+
+      navigate("/diet-plan");
+      console.log(dietPlanData);
+    } catch (error) {}
+
     setIsClicked(true);
     navigate("/diet-plan");
 
@@ -35,7 +72,12 @@ export default function MainAppScreen() {
   };
 
   return (
-    <Center h={"100svh"} backgroundImage={"/leaf.png"} backgroundSize={"cover"} as="main">
+    <Center
+      h={"100svh"}
+      backgroundImage={"/leaf.png"}
+      backgroundSize={"cover"}
+      as="main"
+    >
       <form onSubmit={handleSubmit}>
         <Flex
           flexDir={"column"}
