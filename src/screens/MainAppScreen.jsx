@@ -1,65 +1,130 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Center,
+  Flex,
   Heading,
   Image,
   Input,
   InputGroup,
+  InputRightElement,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { SearchIcon } from "@chakra-ui/icons";
+
 export default function MainAppScreen() {
   const [prompt, setPrompt] = useState(undefined);
+  const [isClicked, setIsClicked] = useState(false);
   const navigate = useNavigate();
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  const handleSubmit = () => {
+    setIsClicked(true);
+    navigate("/diet-plan");
+
+    setTimeout(() => {
+      setIsClicked(false);
+    }, 300);
+  };
 
   return (
-    <Center h={"100vh"} backgroundImage={"/leaf.png"} backgroundSize={"cover"}>
-      <VStack>
-        <Image src="/pear.png" transform="scale(0.7)" />
-        <VStack maxWidth={"400px"} spacing={"1.5rem"}>
-          <Heading
-            textAlign={"center"}
-            fontFamily={"hero"}
-            fontWeight={"800"}
-            color={"white"}
-          >
-            Your Perfect Diet Just One click away
-          </Heading>
-          <InputGroup size="lg" maxWidth={"300px"}>
-            <Input
-              placeholder={"Search"}
-              rounded={"full"}
+    <Center h={"100svh"} backgroundImage={"/leaf.png"} backgroundSize={"cover"} as="main">
+      <form onSubmit={handleSubmit}>
+        <Flex
+          flexDir={"column"}
+          alignItems={"center"}
+          maxW={"85vw"}
+          marginInline={"auto"}
+          gap={"clamp(0.5em, 1rem, 3rem)"}
+        >
+          <Image src="/pear.png" width={"18vh"} height={"18vh"} />
+
+          <Flex flexDir={"column"}>
+            <Heading
+              textAlign={"center"}
               fontFamily={"hero"}
-              fontWeight={"400"}
-              backgroundColor={"white"}
-              boxShadow={"0px 0px 4px 4px rgba(234, 234, 234, 0.25)"}
+              fontWeight={"800"}
+              color={"white"}
+              fontSize={"clamp(26px, 3vw, 48px)"}
+            >
+              Your Perfect Diet
+            </Heading>
+            <Heading
+              textAlign={"center"}
+              fontFamily={"hero"}
+              fontWeight={"800"}
+              color={"white"}
+              fontSize={"clamp(26px, 4vw, 55px)"}
+            >
+              Just One click away
+            </Heading>
+          </Flex>
+          <InputGroup
+            justifyContent={"center"}
+            maxW={{ base: "60%", md: "45%" }}
+            size={["sm", "md", "lg"]}
+          >
+            <Input
+              placeholder="Search"
+              backgroundColor={"hsla(0, 0%, 98%, 1)"}
+              borderRadius={"48px"}
+              _placeholder={{ color: "hsla(0, 0%, 0%, 1)", fontFamily: "hero" }}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                  console.log("Enter Pressed");
+                }
+              }}
+              ref={inputRef}
             />
+            <InputRightElement>
+              <SearchIcon
+                color={"black"}
+                cursor={"pointer"}
+                onClick={handleSubmit}
+                style={{
+                  transition: "transform 0.3s ease-in-out",
+                  transform: isClicked ? "scale(1.2)" : "scale(1)",
+                }}
+              />
+            </InputRightElement>
           </InputGroup>
           <Text
             textAlign={"center"}
             color={"white"}
-            fontFamily={"button"}
+            fontFamily={"paragraph"}
             fontWeight={"600"}
+            letterSpacing={"2px"}
+            fontSize={"clamp(13px, 2.9vw, 3vh)"}
           >
-            Diet Genie is an AI-powered customised diet plan that tells you
-            exactly what to Eat to Breakfast ,Lunch and Dinner. All at the touch
-            of a button
+            Diet Genie is an AI-powered customised diet plan
+            <br />
+            that tells you exactly what to Eat Breakfast ,Lunch and Dinner.
+            <br />
+            All at the touch of a button
           </Text>
           <Button
             rounded={"full"}
             backgroundColor={"black"}
-            colorScheme={"blackAlpha"}
+            colorScheme={"black"}
             textColor={"white"}
-            onClick={() => navigate("/diet-plan")}
+            fontSize={"clamp(14px, 1vw, 24px)"}
+            size={"lg"}
+            type="submit"
           >
             Generate you diet plan now
           </Button>
-        </VStack>
-      </VStack>
+        </Flex>
+      </form>
     </Center>
   );
 }
