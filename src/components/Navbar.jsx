@@ -1,80 +1,26 @@
-import React, {useState} from 'react';
-import {Button, Collapse, Flex, Heading, HStack, IconButton, Stack, Text} from "@chakra-ui/react";
-import {Link} from "react-router-dom"
-import { AiOutlineMenuFold } from "react-icons/ai"
+import React from "react";
+import { Flex, Heading } from "@chakra-ui/react";
 
-export default function Navbar ({isLoggedIn, setIsLoggedIn}) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+export default function Navbar() {
   return (
-    <Flex position={'fixed'} zIndex="999" top="0" left="0" right="0">
-      <Flex width="100%" justify={{ base:'center', md:'space-around'}} minHeight={'5rem'} alignItems="center">
-        <IconButton
-            aria-label={'Menu'}
-            display={{ sm: 'block', md: "none"}}
-            icon={<AiOutlineMenuFold />}
-            position={'fixed'}
-            right={'.5rem'}
-            isRound={true}
-            onClick={toggleMenu}
-        />
-        <HStack display={{ base: 'none', sm: "none", md: 'flex'}} spacing={{ md: '1rem', lg: '4.5rem' }} fontFamily='nav_item' fontWeight={'900'} fontSize="1.1rem" color={'white'} padding={'0.5rem'}>
-          <Link to={'/'}>
-          <Text>
-            Home
-          </Text>
-          </Link>
-          <Link to={'/about'}>
-          <Text>
-            About us
-          </Text>
-        </Link>
-        </HStack>
-        <Heading fontFamily='heading' fontWeight={'900'} letterSpacing={{base: '0.5rem', md:'1rem'}} color={'white'}>
-          DIET GENIE
-        </Heading>
-        { isLoggedIn ? (
-            <>
-              <Link to={'/login'}>
-                <Button textColor={'white'} colorScheme={'blackAlpha'} varaint={'solid'} backgroundColor={'black'}>Logout</Button>
-              </Link>
-            </>
-        ) : (
-            <>
-              <HStack display={{ base: 'none', sm: "none", md: 'flex'}} spacing={{ md: '1rem', lg: '1.5rem' }} fontFamily='button' fontWeight={'400'}>
-                <Link to={'/login'}>
-                  <Button textColor={'white'} colorScheme={'blackAlpha'} varaint={'solid'} backgroundColor={'black'}>Sign In</Button>
-                </Link>
-                <Link to={'/register'}>
-                  <Button textColor={'black'} variant={'outline'} backgroundColor={'blackAlpha.100'}>Sign Up</Button>
-                </Link>
-              </HStack>
-            </>
-        )}
-
-        <Collapse in={isMenuOpen} animateOpacity>
-          <Stack
-              spacing="1rem"
-              backgroundColor="whiteAlpha.600"
-              position="absolute"
-              top="5rem"
-              right="0.5rem"
-              p="1rem"
-              borderRadius="md"
-              boxShadow="lg"
-          >
-            <Text>Home</Text>
-            <Text>About</Text>
-            <Link to={"/login"}>
-            <Text>Sign Out</Text>
-            </Link>
-          </Stack>
-        </Collapse>
-      </Flex>
+    <Flex
+      as={"nav"}
+      position={"fixed"}
+      zIndex="900"
+      width={"100%"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      padding={"clamp(1rem, 1.8vw, 4rem)"}
+    >
+      <Heading
+        fontFamily="heading"
+        fontWeight={"900"}
+        letterSpacing={{ base: "0.3rem", md: "1rem" }}
+        color={"white"}
+        fontSize={"clamp(24px, 4vh, 49px)"}
+      >
+        DIET GENIE
+      </Heading>
     </Flex>
   );
-};
-
+}

@@ -1,99 +1,126 @@
 import React from "react";
 import {
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
   Center,
+  Flex,
   Heading,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
+  ListItem,
+  UnorderedList,
 } from "@chakra-ui/react";
-import { dietPlanSchema } from "../utils/dietSchema";
 
-export default function DietPlanScreen() {
-  const MealCard = ({ day, meals }) => {
-    if (!dietPlanSchema[day]) {
-      return null;
-    }
-
+export default function DietPlanScreen({ dietPlan }) {
+  if (!dietPlan || Object.keys(dietPlan).length === 0) {
     return (
-      <Table>
-        <Thead>
-          <Tr>
-            <Th padding={" sm: 0, md: 0, lg: 0"}>Meals</Th>
-            <Th>Food Items</Th>
-            <Th>Macros (Protein, Carbs, Fats)</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {meals.map((meal) => (
-            <Tr key={`${day}-${meal}`}>
-              <Th>{meal}</Th>
-              <Td>
-                <ul style={{ listStyle: "none", padding: "0" }}>
-                  {dietPlanSchema[day][meal].map((item) => (
-                    <li style={{ marginBottom: "0.25em" }} key={item.Food}>
-                      {item.Food}
-                    </li>
-                  ))}
-                </ul>
-              </Td>
-              <Td>
-                <ul
-                  style={{
-                    listStyle: "none",
-                    padding: "0",
-                    fontFamily: "monospace",
-                  }}
-                >
-                  {dietPlanSchema[day][meal].map((item) => (
-                    <li
-                      key={item.Food}
-                      style={{ display: "inline-block", marginRight: "5em" }}
-                    >
-                      <div style={{ marginBottom: "0.3em" }}>
-                        {item.Protein}
-                      </div>
-                      <div style={{ marginBottom: "0.3em" }}>{item.Carbs}</div>
-                      <div style={{ marginBottom: "0.3em" }}>{item.Fats}</div>
-                    </li>
-                  ))}
-                </ul>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+      <Center
+        height={"100vh"}
+        backgroundImage={"/fruits.jpg"}
+        backgroundSize={"cover"}
+        backgroundPosition={"center top 0"}
+        display={"flex"}
+        flexDir={"column"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        gap={"2rem"}
+      >
+        <Heading
+          fontFamily={"nav_item"}
+          fontWeight={"700"}
+          letterSpacing={"1vw"}
+          fontSize={"clamp(2rem, 3vw, 8rem)"}
+          color={"white"}
+        >
+          No Diet Plan Available
+        </Heading>
+        <Heading
+          fontFamily={"nav_item"}
+          fontWeight={"700"}
+          letterSpacing={"0.3vw"}
+          fontSize={"clamp(2rem, 1vw, 8rem)"}
+          color={"white"}
+        >
+          Please search again
+        </Heading>
+      </Center>
     );
-  };
+  }
 
   return (
     <>
-      <Box minHeight={"5rem"} backgroundColor={"lightcoral"} />
       <Center
-        h={"calc(100vh - 5rem)"}
-        backgroundImage={"/fruits.png"}
+        height={"100vh"}
+        backgroundImage={"/fruits.jpg"}
         backgroundSize={"cover"}
+        backgroundPosition={"center top 0"}
         display={"flex"}
         alignItems={"center"}
         justifyContent={"center"}
       >
-        {Object.keys(dietPlanSchema).map((day) => (
-          <div key={day}>
-            <Card width={"50rem"} height={"31rem"} padding={"0.7rem"}>
-              <CardHeader>
-                <Heading as={"h2"}>{day}</Heading>
-              </CardHeader>
-              <CardBody>
-                <MealCard day={day} meals={["Breakfast", "Lunch", "Dinner"]} />
-              </CardBody>
-            </Card>
-          </div>
+        {Object.keys(dietPlan).map((day, index) => (
+          <Flex key={index} flexDir={"column"} gap={"6vh"} color={"white"}>
+            {/* Day's Plan Heading */}
+            <Heading
+              alignSelf={"center"}
+              textAlign={"center"}
+              fontFamily={"nav_item"}
+              fontWeight={"700"}
+              letterSpacing={"2.5vw"}
+              fontSize={"clamp(2rem, 3vw, 8rem)"}
+              marginTop={"4rem"}
+            >
+              {day}
+            </Heading>
+
+            {/* Actual Plan (Breakfast, lunch, dinner) */}
+            <Flex
+              key={day}
+              width={{ base: "90vw", md: "85vw" }}
+              marginInline={"auto"}
+              borderRadius={"79px"}
+              background={"whiteAlpha.400"}
+              padding={"4rem 1rem"}
+              justifyContent={"center"}
+              paddingInline={"1.5rem"}
+            >
+              <Flex
+                justifyContent={{ base: "space-between", md: "space-evenly" }}
+                gap={"10vw"}
+              >
+                {Object.keys(dietPlan[day]).map((meal) => (
+                  <UnorderedList
+                    key={meal}
+                    listStyleType={"none"}
+                    display={"flex"}
+                    flexDir={"column"}
+                    alignItems={"left"}
+                    margin={0}
+                    justifyContent={"flex-start"}
+                    gap={"1.5rem"}
+                  >
+                    <Heading
+                      fontFamily={"nav_item"}
+                      fontWeight={"700"}
+                      fontSize={"clamp(10px, 2vw, 100px)"}
+                      letterSpacing={{ base: "2px", md: "10px" }}
+                      paddingBottom={"2rem"}
+                      alignSelf={"center"}
+                    >
+                      {meal}
+                    </Heading>
+                    {dietPlan[day][meal].map((food, foodIndex) => (
+                      <ListItem
+                        key={foodIndex}
+                        fontFamily={"nav_item"}
+                        fontWeight={"400"}
+                        fontSize={"clamp(12px, 1.5vw, 58px)"}
+                        borderBottom={"1px dotted white"}
+                      >
+                        {food}
+                      </ListItem>
+                    ))}
+                  </UnorderedList>
+                ))}
+              </Flex>
+            </Flex>
+          </Flex>
         ))}
       </Center>
     </>

@@ -1,82 +1,167 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import {
   Button,
   Center,
+  Flex,
   Heading,
+  IconButton,
   Image,
   Input,
   InputGroup,
+  InputRightElement,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-export default function MainAppScreen() {
-  const [prompt, setPrompt] = useState(undefined);
-  const navigate = useNavigate();
+import { SearchIcon } from "@chakra-ui/icons";
+import { dietPlanSchema } from "../utils/dietSchema";
 
-  // const handleSubmit = async () => {
-  //     try {
-  //         const customPrompt = `${prompt}\nGenerate a high protein rich Dietplan for a day.
-  //             Result must be in json format. Each day has 3 meals each meal contains 3 items.
-  //             Provide Protein, Carbs, Fats of each food item.
-  //             Follow this json: ${JSON.stringify(dietPlanSchema)}`;
-  //
-  //         const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, { prompt: customPrompt });
-  //         const dietPlanData = response.data;
-  //         dispatch(setDietPlan(dietPlanData));
-  //         navigate('/diet-plan')
-  //         console.log(dietPlanData);
-  //     } catch (error) {
-  //         console.log(error);
-  //     }
-  // }
+export default function MainAppScreen({ setDietPlan }) {
+  const [prompt, setPrompt] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const navigate = useNavigate();
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  const BASE_URL = "http://localhost:5000/api";
+  const DIET_URL = "diet";
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+
+    const customPrompt = `${prompt}\nGenerate a high protein rich Dietplan for a day.
+      Result must be in json format. Each day has 3 meals each meal contains 3 items.
+      Follow this json: ${JSON.stringify(dietPlanSchema)};`;
+
+    try {
+      const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, {
+        prompt: customPrompt,
+      });
+
+      const dietPlanData = response.data;
+      setDietPlan(dietPlanData);
+      navigate("/diet-plan");
+      setIsClicked(false);
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <Center h={"100vh"} backgroundImage={"/leaf.png"} backgroundSize={"cover"}>
-      <VStack>
-        <Image src="/pear.png" transform="scale(0.7)" />
-        <VStack maxWidth={"400px"} spacing={"1.5rem"}>
+    <Center
+      h={"100svh"}
+      backgroundImage={"/leaf.png"}
+      backgroundSize={"cover"}
+      as="main"
+    >
+      <Flex
+        flexDir={"column"}
+        alignItems={"center"}
+        maxW={"85vw"}
+        marginInline={"auto"}
+        gap={"clamp(0.5em, 1rem, 3rem)"}
+      >
+        <Image src="/pear.png" width={"18vh"} height={"18vh"} />
+
+        <Flex flexDir={"column"}>
           <Heading
             textAlign={"center"}
             fontFamily={"hero"}
             fontWeight={"800"}
             color={"white"}
+            fontSize={"clamp(26px, 3vw, 48px)"}
           >
-            Your Perfect Diet Just One click away
+            Your Perfect Diet
           </Heading>
-          <InputGroup size="lg" maxWidth={"300px"}>
-            <Input
-              placeholder={"Search"}
-              rounded={"full"}
-              fontFamily={"hero"}
-              fontWeight={"400"}
-              backgroundColor={"white"}
-              boxShadow={"0px 0px 4px 4px rgba(234, 234, 234, 0.25)"}
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
-          </InputGroup>
-          <Text
+          <Heading
             textAlign={"center"}
+            fontFamily={"hero"}
+            fontWeight={"800"}
             color={"white"}
-            fontFamily={"button"}
-            fontWeight={"600"}
+            fontSize={"clamp(26px, 4vw, 55px)"}
           >
-            Diet Genie is an AI-powered customised diet plan that tells you
-            exactly what to Eat to Breakfast ,Lunch and Dinner. All at the touch
-            of a button
-          </Text>
-          <Button
-            rounded={"full"}
-            backgroundColor={"black"}
-            colorScheme={"blackAlpha"}
-            textColor={"white"}
-            onClick={() => navigate("/diet-plan")}
-          >
-            Generate you diet plan now
-          </Button>
-        </VStack>
-      </VStack>
+            Just One click away
+          </Heading>
+        </Flex>
+        <InputGroup
+          justifyContent={"center"}
+          maxW={{ base: "60%", md: "45%" }}
+          size={["sm", "md", "lg"]}
+        >
+          <Input
+            placeholder="Search"
+            backgroundColor={"hsla(0, 0%, 98%, 1)"}
+            borderRadius={"48px"}
+            _placeholder={{ color: "hsla(0, 0%, 0%, 1)", fontFamily: "hero" }}
+            value={prompt}
+            isDisabled={isLoading}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit();
+                console.log("Enter Pressed");
+              }
+            }}
+            ref={inputRef}
+            isRequired
+          />
+          <InputRightElement>
+            <IconButton
+            variant={"ghost"}
+              icon={<SearchIcon />}
+              color={"black"}
+              cursor={"pointer"}
+              onClick={() => {
+                handleSubmit();
+                setIsClicked(true);
+              }}
+              isDisabled={isLoading || !prompt}
+              style={{
+                transition: "transform 0.3s ease-in-out",
+                transform: isClicked ? "scale(1.2)" : "scale(1)",
+              }}
+             aria-label={"Search Icon"}/>
+          </InputRightElement>
+        </InputGroup>
+        <Text
+          textAlign={"center"}
+          color={"white"}
+          fontFamily={"paragraph"}
+          fontWeight={"600"}
+          letterSpacing={"2px"}
+          fontSize={"clamp(13px, 2.9vw, 3vh)"}
+        >
+          Diet Genie is an AI-powered customised diet plan
+          <br />
+          that tells you exactly what to Eat Breakfast ,Lunch and Dinner.
+          <br />
+          All at the touch of a button
+        </Text>
+        <Button
+          rounded={"full"}
+          backgroundColor={"black"}
+          colorScheme={"black"}
+          textColor={"white"}
+          fontSize={"clamp(14px, 1.5vw, 24px)"}
+          size={"lg"}
+          type="submit"
+          onClick={handleSubmit}
+          isDisabled={isLoading || !prompt}
+          isLoading={isLoading}
+          loadingText="Cooking..."
+          padding={{ xl: "1rem", "2xl": "2.3rem" }}
+        >
+          Generate you diet plan now
+        </Button>
+      </Flex>
     </Center>
   );
 }
