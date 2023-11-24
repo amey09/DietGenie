@@ -29,9 +29,6 @@ export default function MainAppScreen({ setDietPlan }) {
     }
   }, []);
 
-  const BASE_URL = process.env.SERVER_URL;
-  const DIET_URL = 'api'
-
   const handleSubmit = async () => {
     setIsLoading(true);
 
@@ -40,7 +37,7 @@ export default function MainAppScreen({ setDietPlan }) {
       Follow this json: ${JSON.stringify(dietPlanSchema)};`;
 
     try {
-      const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, {
+      const response = await axios.post(`https://diet-genie-backend.vercel.app/api/getDietPlan`, {
         prompt: customPrompt,
       });
 
