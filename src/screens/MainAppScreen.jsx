@@ -29,8 +29,7 @@ export default function MainAppScreen({ setDietPlan }) {
     }
   }, []);
 
-  const BASE_URL = "http://localhost:5000/api";
-  const DIET_URL = "diet";
+  const BASE_URL = process.env.SERVER_URL;
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -40,7 +39,7 @@ export default function MainAppScreen({ setDietPlan }) {
       Follow this json: ${JSON.stringify(dietPlanSchema)};`;
 
     try {
-      const response = await axios.post(`${BASE_URL}/${DIET_URL}/getDietPlan`, {
+      const response = await axios.post(`${BASE_URL}/diet/getDietPlan`, {
         prompt: customPrompt,
       });
 
